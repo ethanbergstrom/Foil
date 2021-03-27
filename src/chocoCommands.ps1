@@ -10,7 +10,7 @@ $BaseParameters = @()
 $BaseOutputHandlers = @{
     ParameterSetName = 'Default'
     Handler = {
-        param ( $output ) $output
+        param ( $output )
     }
 }
 
@@ -18,34 +18,27 @@ $Commands = @(
     @{
         Noun = 'ChocoSource'
         OriginalCommandElements = @('source')
-        Parameters = @(
-            @{
-                Name = 'Name'
-                ParameterType = 'string'
-                Description = 'Source Name'
-                OriginalName = '--name='
-                NoGap = $true
-            }
-        )
         Verbs = @(
             @{
                 Verb = 'Get'
                 OutputHandlers = @{
                     ParameterSetName = 'Default'
                     Handler = {
-                        param ( $output )
-                        $output | ForEach-Object {
-                            $sourceData = $_ -split '\|'
-                            [pscustomobject]@{
-                                Name = $sourceData[0]
-                                Location = $sourceData[1]
-                                Disabled = $sourceData[2]
-                                UserName = $sourceData[3]
-                                Certificate = $sourceData[4]
-                                Priority = $sourceData[5]
-                                'Bypass Proxy' = $sourceData[6]
-                                'Allow Self Service' = $sourceData[7]
-                                'Visibile to Admins Only' = $sourceData[8]
+                        param ($output)
+                        if ($output) {
+                            $output | ForEach-Object {
+                                $sourceData = $_ -split '\|'
+                                [pscustomobject]@{
+                                    Name = $sourceData[0]
+                                    Location = $sourceData[1]
+                                    Disabled = $sourceData[2]
+                                    UserName = $sourceData[3]
+                                    Certificate = $sourceData[4]
+                                    Priority = $sourceData[5]
+                                    'Bypass Proxy' = $sourceData[6]
+                                    'Allow Self Service' = $sourceData[7]
+                                    'Visibile to Admins Only' = $sourceData[8]
+                                }
                             }
                         }
                     }
@@ -55,6 +48,13 @@ $Commands = @(
                 Verb = 'Add'
                 OriginalCommandElements = @('add')
                 Parameters = @(
+                    @{
+                        Name = 'Name'
+                        ParameterType = 'string'
+                        Description = 'Source Name'
+                        OriginalName = '--name='
+                        NoGap = $true
+                    },
                     @{
                         Name = 'Source'
                         OriginalName = '--source='
@@ -67,6 +67,15 @@ $Commands = @(
             @{
                 Verb = 'Remove'
                 OriginalCommandElements = @('remove')
+                Parameters = @(
+                    @{
+                        Name = 'Name'
+                        ParameterType = 'string'
+                        Description = 'Source Name'
+                        OriginalName = '--name='
+                        NoGap = $true
+                    }
+                )
             }
         )
     },
@@ -120,12 +129,22 @@ $Commands = @(
         OutputHandlers = @{
             ParameterSetName = 'Default'
             Handler = {
-                param ( $output )
-                $output | ForEach-Object {
-                    $name,$version = $_ -split '\|'
-                    [pscustomobject]@{
-                        Name = $name
-                        Version = $version
+                param ($output)
+                if ($output) {
+                    $failures = ($output -match 'fail')
+                    if ($failures) {
+                        Write-Error ($output -join "`r`n")
+                    } else {
+                        $packageRegex = "^(?<name>[\S]+)[\|\s]v(?<version>[\S]+)"
+                        $packageReportRegex="^[0-9]*(\s*)(packages installed)"
+                        $output | ForEach-Object {
+                            if (($_ -match $packageRegex) -and ($_ -notmatch $packageReportRegex) -and ($_ -notmatch 'already installed') -and $Matches.name -and $Matches.version) {
+                                [pscustomobject]@{
+                                    Name = $Matches.name
+                                    Version = $Matches.version
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -138,6 +157,19 @@ $Commands = @(
             @{
                 Verb = 'Get'
                 OriginalCommandElements = @('search')
+                OutputHandlers = @{
+                    ParameterSetName = 'Default'
+                    Handler = {
+                        param ( $output )
+                        $output | ForEach-Object {
+                            $name,$version = $_ -split '\|'
+                            [pscustomobject]@{
+                                Name = $name
+                                Version = $version
+                            }
+                        }
+                    }
+                }
             },
             @{
                 Verb = 'Uninstall'
