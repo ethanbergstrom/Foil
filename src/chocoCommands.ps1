@@ -49,14 +49,14 @@ $Commands = @(
                 OriginalCommandElements = @('add')
                 Parameters = @(
                     @{
-                        Name = 'Name'
+                        Name = 'SourceName'
                         ParameterType = 'string'
                         Description = 'Source Name'
                         OriginalName = '--name='
                         NoGap = $true
                     },
                     @{
-                        Name = 'Source'
+                        Name = 'SourceLocation'
                         OriginalName = '--source='
                         NoGap = $true
                         ParameterType = 'string'
@@ -69,7 +69,7 @@ $Commands = @(
                 OriginalCommandElements = @('remove')
                 Parameters = @(
                     @{
-                        Name = 'Name'
+                        Name = 'SourceName'
                         ParameterType = 'string'
                         Description = 'Source Name'
                         OriginalName = '--name='
@@ -83,7 +83,7 @@ $Commands = @(
         Noun = 'ChocoPackage'
         Parameters = @(
             @{
-                Name = 'Name'
+                Name = 'PackageName'
                 ParameterType = 'string'
                 Description = 'Package Name'
             },
@@ -95,7 +95,7 @@ $Commands = @(
                 NoGap = $true
             },
             @{
-                Name = 'Source'
+                Name = 'SourceName'
                 OriginalName = '--source='
                 ParameterType = 'string'
                 Description = 'Package Source'
