@@ -153,6 +153,32 @@ $Commands = @(
             @{
                 Verb = 'Install'
                 OriginalCommandElements = @('install','--no-progress')
+                Parameters = @(
+                    @{
+                        Name = 'ParamsGlobal'
+                        OriginalName = '--params-global'
+                        ParameterType = 'switch'
+                        Description = 'Apply package parameters to dependencies'
+                    },
+                    @{
+                        Name = 'Parameters'
+                        OriginalName = '--parameters'
+                        ParameterType = 'string'
+                        Description = 'Parameters to pass to the package'
+                    },
+                    @{
+                        Name = 'ArgsGlobal'
+                        OriginalName = '--args-global'
+                        ParameterType = 'switch'
+                        Description = 'Apply package arguments to dependencies'
+                    },
+                    @{
+                        Name = 'InstallArguments'
+                        OriginalName = '--install-arguments'
+                        ParameterType = 'string'
+                        Description = 'Parameters to pass to the package'
+                    }
+                )
             },
             @{
                 Verb = 'Get'
@@ -163,9 +189,11 @@ $Commands = @(
                         param ( $output )
                         $output | ForEach-Object {
                             $name,$version = $_ -split '\|'
-                            [pscustomobject]@{
-                                Name = $name
-                                Version = $version
+                            if ( -not [string]::IsNullOrEmpty($name)) {
+                                [pscustomobject]@{
+                                    Name = $name
+                                    Version = $version
+                                }
                             }
                         }
                     }
