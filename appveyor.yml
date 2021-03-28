@@ -7,7 +7,6 @@ install:
 
 build_script:
   - pwsh: |
-      Get-ChildItem env:
       Install-Module Microsoft.PowerShell.Crescendo -Force
       New-Item -ItemType Directory -Name Foil -Path ~\Documents\WindowsPowerShell\Modules\
       .\build.ps1
@@ -21,4 +20,4 @@ on_finish:
   - ps: Get-ChildItem $env:programdata\chocolatey\logs | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 
 deploy_script:
-  - ps: if ($env:APPVEYOR_REPO_TAG_NAME -eq 'true') {Write-Output "Publishing...";Publish-Module -Name Foil -NuGetApiKey "$env:PSGALLERYKEY" -Exclude @('model.ps1')}
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq 'true') {Write-Output "Publishing...";Publish-Module -Name Foil -NuGetApiKey "$env:PSGALLERYKEY" -Exclude @('model.ps1')}
