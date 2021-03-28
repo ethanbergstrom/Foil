@@ -1,4 +1,4 @@
-. .\src\model.ps1
+. .\src\foil.ps1
 
 $tempJsonArray = @()
 
