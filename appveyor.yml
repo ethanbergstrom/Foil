@@ -7,6 +7,7 @@ install:
 
 build_script:
   - pwsh: |
+      Get-ChildItem env:
       Install-Module Microsoft.PowerShell.Crescendo -Force
       New-Item -ItemType Directory -Name Foil -Path ~\Documents\WindowsPowerShell\Modules\
       .\build.ps1
