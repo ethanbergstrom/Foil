@@ -1,4 +1,4 @@
-. .\src\chocoCommands.ps1
+. .\src\model.ps1
 
 $tempJsonArray = @()
 
@@ -27,4 +27,4 @@ $commands | ForEach-Object {
     }
 }
 
-Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName .\Foil.psm1 -Force
+Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName .\src\Foil.psm1 -Force

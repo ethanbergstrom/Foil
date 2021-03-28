@@ -45,35 +45,38 @@ $Commands = @(
                 }
             },
             @{
-                Verb = 'Add'
+                Verb = 'Register'
                 OriginalCommandElements = @('add')
                 Parameters = @(
                     @{
-                        Name = 'SourceName'
+                        Name = 'Name'
                         ParameterType = 'string'
                         Description = 'Source Name'
                         OriginalName = '--name='
                         NoGap = $true
+                        Mandatory = $true
                     },
                     @{
-                        Name = 'SourceLocation'
+                        Name = 'Location'
                         OriginalName = '--source='
                         NoGap = $true
                         ParameterType = 'string'
                         Description = 'Source Location'
+                        Mandatory = $true
                     }
                 )
             },
             @{
-                Verb = 'Remove'
+                Verb = 'Unregister'
                 OriginalCommandElements = @('remove')
                 Parameters = @(
                     @{
-                        Name = 'SourceName'
+                        Name = 'Name'
                         ParameterType = 'string'
                         Description = 'Source Name'
                         OriginalName = '--name='
                         NoGap = $true
+                        Mandatory = $true
                     }
                 )
             }
@@ -83,7 +86,7 @@ $Commands = @(
         Noun = 'ChocoPackage'
         Parameters = @(
             @{
-                Name = 'PackageName'
+                Name = 'Name'
                 ParameterType = 'string'
                 Description = 'Package Name'
             },
@@ -93,37 +96,6 @@ $Commands = @(
                 ParameterType = 'string'
                 Description = 'Package version'
                 NoGap = $true
-            },
-            @{
-                Name = 'SourceName'
-                OriginalName = '--source='
-                ParameterType = 'string'
-                Description = 'Package Source'
-                NoGap = $true
-            },
-            @{
-                Name = 'AllVersions'
-                OriginalName = '--all-versions'
-                ParameterType = 'switch'
-                Description = 'All Versions'
-            },
-            @{
-                Name = 'LocalOnly'
-                OriginalName = '--local-only'
-                ParameterType = 'switch'
-                Description = 'Local Packages Only'
-            },
-            @{
-                Name = 'Exact'
-                OriginalName = '--exact'
-                ParameterType = 'switch'
-                Description = 'Search by exact package name'
-            },
-            @{
-                Name = 'Force'
-                OriginalName = '--force'
-                ParameterType = 'switch'
-                Description = 'Force the operation'
             }
         )
         OutputHandlers = @{
@@ -177,21 +149,61 @@ $Commands = @(
                         OriginalName = '--install-arguments'
                         ParameterType = 'string'
                         Description = 'Parameters to pass to the package'
+                    },
+                    @{
+                        Name = 'Source'
+                        OriginalName = '--source='
+                        ParameterType = 'string'
+                        Description = 'Package Source'
+                        NoGap = $true
+                    },
+                    @{
+                        Name = 'Force'
+                        OriginalName = '--force'
+                        ParameterType = 'switch'
+                        Description = 'Force the operation'
                     }
                 )
             },
             @{
                 Verb = 'Get'
                 OriginalCommandElements = @('search')
+                Parameters = @(
+                    @{
+                        Name = 'AllVersions'
+                        OriginalName = '--all-versions'
+                        ParameterType = 'switch'
+                        Description = 'All Versions'
+                    },
+                    @{
+                        Name = 'LocalOnly'
+                        OriginalName = '--local-only'
+                        ParameterType = 'switch'
+                        Description = 'Local Packages Only'
+                    },
+                    @{
+                        Name = 'Exact'
+                        OriginalName = '--exact'
+                        ParameterType = 'switch'
+                        Description = 'Search by exact package name'
+                    },
+                    @{
+                        Name = 'Source'
+                        OriginalName = '--source='
+                        ParameterType = 'string'
+                        Description = 'Package Source'
+                        NoGap = $true
+                    }
+                )
                 OutputHandlers = @{
                     ParameterSetName = 'Default'
                     Handler = {
                         param ( $output )
                         $output | ForEach-Object {
-                            $name,$version = $_ -split '\|'
+                            $Name,$version = $_ -split '\|'
                             if ( -not [string]::IsNullOrEmpty($name)) {
                                 [pscustomobject]@{
-                                    Name = $name
+                                    Name = $Name
                                     Version = $version
                                 }
                             }
@@ -202,6 +214,14 @@ $Commands = @(
             @{
                 Verb = 'Uninstall'
                 OriginalCommandElements = @('uninstall','--remove-dependencies')
+                Parameters = @(
+                    @{
+                        Name = 'Force'
+                        OriginalName = '--force'
+                        ParameterType = 'switch'
+                        Description = 'Force the operation'
+                    }
+                )
             }
         )
     }
