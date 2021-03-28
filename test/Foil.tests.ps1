@@ -97,17 +97,14 @@ Describe "multi-source support" {
 		Unregister-ChocoSource -Name $altSource -ErrorAction SilentlyContinue
 	}
 
-	It 'refuses to register a source with no location' {
-		Register-ChocoSource -Name $altSource -ErrorAction SilentlyContinue | Where-Object {$_.Name -eq $altSource} | Should -BeNullOrEmpty
-	}
 	It 'registers an alternative package source' {
-		Register-ChocoSource -Name $altSource -Location $altLocation | Where-Object {$_.Name -eq $altSource} | Should -Not -BeNullOrEmpty
+		Register-ChocoSource -Name $altSource -Location $altLocation | Where-Object {$_.Name -eq $altSource} | Should -Not -Throw
 	}
 	It 'searches for and installs the latest version of a package from an alternate source' {
 		Get-ChocoPackage -Name $package -source $altSource | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 	}
 	It 'finds and uninstalls a package installed from an alternate source' {
-		Get-ChocoPackage -Name $package -LocalOnly | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+		Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 	}
 	It 'unregisters an alternative package source' {
 		Unregister-ChocoSource -Name $altSource
@@ -126,7 +123,7 @@ Describe "version filters" {
 
 	Context 'required version' {
 		It 'searches for and silently installs a specific package version' {
-			Get-ChocoPackage -Name $package -Version $version | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
 		}
 		It 'finds and silently uninstalls a specific package version' {
 			Get-ChocoPackage -Name $package -Version $version -LocalOnly | UnInstall-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
