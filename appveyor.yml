@@ -6,7 +6,7 @@ install:
   - cinst pester --version 4.10.1
 
 build_script:
-  - ps: |
+  - pwsh: |
       New-Item -ItemType Directory -Name Foil -Path ~\Documents\WindowsPowerShell\Modules\
       .\build.ps1
       Copy-Item .\src\* ~\Documents\WindowsPowerShell\Modules\Foil\ -Recurse
