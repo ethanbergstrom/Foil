@@ -65,20 +65,20 @@ Describe "pipline-based package installation and uninstallation" {
 			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
-			Get-ChocoPackage -Name $package -LocalOnly | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 	Context 'with additional parameters' {
 		$package = 'sysinternals'
 
 		It 'searches for and silently installs the latest version of a package' {
-			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force -ParamsGlobal -Parameters "/InstallDir:$env:ProgramFiles\sysinternals /QuickLaunchShortcut:false" | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -Exact | Install-ChocoPackage -Force -ParamsGlobal -Parameters "/InstallDir:$env:ProgramFiles\sysinternals /QuickLaunchShortcut:false" | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'correctly passed parameters to the package' {
 			Get-ChildItem -Path (Join-Path -Path $env:ProgramFiles -ChildPath 'sysinternals') -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
-			Get-ChocoPackage -Name $package -LocalOnly | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 }
