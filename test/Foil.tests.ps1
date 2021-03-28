@@ -98,7 +98,7 @@ Describe "multi-source support" {
 	}
 
 	It 'registers an alternative package source' {
-		Register-ChocoSource -Name $altSource -Location $altLocation | Where-Object {$_.Name -eq $altSource} | Should -Not -Throw
+		{ Register-ChocoSource -Name $altSource -Location $altLocation | Where-Object {$_.Name -eq $altSource} } | Should -Not -Throw
 	}
 	It 'searches for and installs the latest version of a package from an alternate source' {
 		Get-ChocoPackage -Name $package -source $altSource | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
