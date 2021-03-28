@@ -77,6 +77,7 @@ $Commands = @(
                         OriginalName = '--name='
                         NoGap = $true
                         Mandatory = $true
+                        ValueFromPipelineByPropertyName = $true
                     }
                 )
             }
@@ -89,6 +90,7 @@ $Commands = @(
                 Name = 'Name'
                 ParameterType = 'string'
                 Description = 'Package Name'
+                ValueFromPipelineByPropertyName = $true
             },
             @{
                 Name = 'Version'
@@ -96,6 +98,7 @@ $Commands = @(
                 ParameterType = 'string'
                 Description = 'Package version'
                 NoGap = $true
+                ValueFromPipelineByPropertyName = $true
             }
         )
         OutputHandlers = @{
@@ -156,6 +159,7 @@ $Commands = @(
                         ParameterType = 'string'
                         Description = 'Package Source'
                         NoGap = $true
+                        ValueFromPipelineByPropertyName = $true
                     },
                     @{
                         Name = 'Force'
