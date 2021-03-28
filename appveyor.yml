@@ -20,4 +20,4 @@ on_finish:
   - ps: Get-ChildItem $env:programdata\chocolatey\logs | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 
 deploy_script:
-  - ps: if ($env:APPVEYOR_REPO_TAG -and ($env:APPVEYOR_REPO_BRANCH -eq 'master')) {Write-Output "Publishing...";Publish-Module -Name Foil -NuGetApiKey "$env:PSGALLERYKEY" -Exclude @('model.ps1')}
+  - ps: if ($env:APPVEYOR_REPO_TAG) {Write-Output "Publishing...";Publish-Module -Name Foil -NuGetApiKey "$env:PSGALLERYKEY" -Exclude @('model.ps1')}
