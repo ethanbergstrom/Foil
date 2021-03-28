@@ -5,7 +5,7 @@ Describe "basic package search operations" {
 		$package = 'cpu-z'
 
 		It 'gets a list of latest installed packages' {
-			Get-ChocoPackage | Where-Object {$_.Name -contains 'chocolatey'} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -LocalOnly | Where-Object {$_.Name -contains 'chocolatey'} | Should -Not -BeNullOrEmpty
 		}
 		It 'searches for the latest version of a package' {
 			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package}  | Should -Not -BeNullOrEmpty
@@ -30,7 +30,7 @@ Describe "DSC-compliant package installation and uninstallation" {
 			Install-ChocoPackage -Name $package -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'finds the locally installed package just installed' {
-			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -LocalOnly | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently uninstalls the locally installed package just installed' {
 			Uninstall-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
@@ -49,7 +49,7 @@ Describe "DSC-compliant package installation and uninstallation" {
 			Get-ChildItem -Path (Join-Path -Path $env:ProgramFiles -ChildPath 'sysinternals') -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
 		}
 		It 'finds the locally installed package just installed' {
-			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -LocalOnly | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently uninstalls the locally installed package just installed' {
 			Uninstall-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
@@ -65,7 +65,7 @@ Describe "pipline-based package installation and uninstallation" {
 			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
-			Get-ChocoPackage -Name $package | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -LocalOnly | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 	Context 'with additional parameters' {
@@ -78,7 +78,7 @@ Describe "pipline-based package installation and uninstallation" {
 			Get-ChildItem -Path (Join-Path -Path $env:ProgramFiles -ChildPath 'sysinternals') -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
-			Get-ChocoPackage -Name $package | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -LocalOnly | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 }
@@ -107,7 +107,7 @@ Describe "multi-source support" {
 		Get-ChocoPackage -Name $package -source $altSource | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 	}
 	It 'finds and uninstalls a package installed from an alternate source' {
-		Get-ChocoPackage -Name $package | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+		Get-ChocoPackage -Name $package -LocalOnly | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 	}
 	It 'unregisters an alternative package source' {
 		Unregister-ChocoSource -Name $altSource
@@ -129,7 +129,7 @@ Describe "version filters" {
 			Get-ChocoPackage -Name $package -Version $version | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
 		}
 		It 'finds and silently uninstalls a specific package version' {
-			Get-ChocoPackage -Name $package -Version $version | UnInstall-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
+			Get-ChocoPackage -Name $package -Version $version -LocalOnly | UnInstall-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
 		}
 	}
 }
