@@ -44,7 +44,7 @@ Foil integrates with Choco.exe to manage and store source information
 The Install-ChocoPackage cmdlet allows passing package parameters.
 
 ```powershell
-Install-ChocoPackage sysinternals -AcceptLicense -ParamsGlobal -Params '/InstallDir=c:\windows\temp\sysinternals /QuickLaunchShortcut=false' -Verbose
+Install-ChocoPackage sysinternals -AcceptLicense -ParamsGlobal -Params '/InstallDir:c:\windows\temp\sysinternals /QuickLaunchShortcut:false' -Verbose
 ```
 
 ## Known Issues
