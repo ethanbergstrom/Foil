@@ -133,7 +133,7 @@ Describe "version filters" {
 
 Describe "error handling on Chocolatey failures" {
 	$package = 'googlechrome'
-	# Keep at least one version back, to test the 'latest' feature
+	# This version is known to be broken, per https://github.com/chocolatey-community/chocolatey-coreteampackages/issues/1608
 	$version = '87.0.4280.141'
 
 	AfterAll {
@@ -147,7 +147,6 @@ Describe "error handling on Chocolatey failures" {
 
 Describe "avoid false positives in error handling" {
 	$package = 'Office365Business'
-	# Keep at least one version back, to test the 'latest' feature
 	$version = '13901.20336'
 
 	AfterAll {
