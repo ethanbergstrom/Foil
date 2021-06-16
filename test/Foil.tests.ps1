@@ -141,7 +141,7 @@ Describe "error handling on Chocolatey failures" {
 	}
 
 	It 'searches for and fails to silently install a broken package version' {
-		Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Should -Throw
+		{ Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force } | Should -Throw
 	}
 }
 
@@ -154,6 +154,6 @@ Describe "avoid false positives in error handling" {
 	}
 
 	It 'searches for and silently installs a specific package version that contains "fail" the output' {
-		Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Should -Throw
+		{ Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force } | Should -Throw
 	}
 }
