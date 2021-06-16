@@ -7,10 +7,10 @@ install:
 
 build_script:
   - pwsh: |
-      Install-Module Microsoft.PowerShell.Crescendo -Force
-      New-Item -ItemType Directory -Name Foil -Path ~\Documents\WindowsPowerShell\Modules\
+      Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
+      New-Item -ItemType Directory -Name Foil -Path ~\Documents\PowerShell\Modules\
       .\build.ps1
-      Copy-Item .\src\* ~\Documents\WindowsPowerShell\Modules\Foil\ -Recurse
+      Copy-Item .\src\* ~\Documents\PowerShell\Modules\Foil\ -Recurse
 
 test_script:
   - ps: Invoke-Pester -EnableExit -OutputFormat NUnitXml -OutputFile TestsResults.xml
