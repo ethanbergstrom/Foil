@@ -11,7 +11,7 @@
 	PrivateData = @{
 		PSData = @{
 			# Tags applied to this module to indicate this is a PackageManagement Provider.
-			Tags = @('Crescendo','Chocolatey','PSEdition_Desktop','PSEdition_Core','Windows')
+			Tags = @('Crescendo','Chocolatey','PSEdition_Desktop','PSEdition_Core','Windows','CrescendoBuilt')
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/ethanbergstrom/foil/blob/master/LICENSE.txt'
