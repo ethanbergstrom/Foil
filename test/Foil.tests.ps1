@@ -130,3 +130,31 @@ Describe "version filters" {
 		}
 	}
 }
+
+Describe "error handling on Chocolatey failures" {
+	$package = 'googlechrome'
+	# Keep at least one version back, to test the 'latest' feature
+	$version = '87.0.4280.141'
+
+	AfterAll {
+		Uninstall-ChocoPackage -Name $package -ErrorAction SilentlyContinue
+	}
+
+	It 'searches for and fails to silently install a broken package version' {
+		Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Should -Throw
+	}
+}
+
+Describe "avoid false positives in error handling" {
+	$package = 'Office365Business'
+	# Keep at least one version back, to test the 'latest' feature
+	$version = '13901.20336'
+
+	AfterAll {
+		Uninstall-ChocoPackage -Name $package -ErrorAction SilentlyContinue
+	}
+
+	It 'searches for and silently installs a specific package version that contains "fail" the output' {
+		Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Should -Throw
+	}
+}

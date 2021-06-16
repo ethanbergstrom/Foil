@@ -106,7 +106,7 @@ $Commands = @(
             Handler = {
                 param ($output)
                 if ($output) {
-                    $failures = ($output -match 'fail')
+                    $failures = ($output -match 'Chocolatey installed \d+\/\d+ packages. \d+ packages failed\.')
                     if ($failures) {
                         Write-Error ($output -join "`r`n")
                     } else {
