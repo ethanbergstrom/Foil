@@ -144,16 +144,3 @@ Describe "error handling on Chocolatey failures" {
 		{ Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force } | Should -Throw
 	}
 }
-
-Describe "avoid false positives in error handling" {
-	$package = 'Office365Business'
-	$version = '13901.20336'
-
-	AfterAll {
-		Uninstall-ChocoPackage -Name $package -ErrorAction SilentlyContinue
-	}
-
-	It 'searches for and silently installs a specific package version that contains "fail" the output' {
-		{ Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force } | Should -Throw
-	}
-}
