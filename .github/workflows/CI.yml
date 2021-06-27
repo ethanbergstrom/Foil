@@ -23,9 +23,9 @@ jobs:
           path: "~/.local/share/powershell/Modules"
           key: crescendo-0.4.1-cache
       - name: Install Crescendo
-          if: steps.cacher.outputs.cache-hit != 'true'
-          shell: pwsh
-          run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
+        if: steps.cacher.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
       - name: Build the module with Crescendo
         run: .\build.ps1
       - name: Bundle up module
