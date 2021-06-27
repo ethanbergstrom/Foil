@@ -27,4 +27,4 @@ $commands | ForEach-Object {
     }
 }
 
-Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName .\src\Foil.psm1 -Force
+Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName (Resolve-Path (Join-Path -Path src -ChildPath Foil.psm1)) -Force
