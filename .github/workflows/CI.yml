@@ -27,7 +27,7 @@ jobs:
         shell: pwsh
         run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
       - name: Build the module with Crescendo
-        run: .\build.ps1
+        run: ./build.ps1
       - name: Bundle up module
         if: always()
         uses: actions/upload-artifact@v2
