@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Crescendo
+        run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
+      - name: Create module directory
+        run: New-Item -ItemType Directory -Name Foil -Path ~\Documents\PowerShell\Modules\
+      - name: Build the module with Crescendo
+        run: .\build.ps1
+      - name: Copy the built module into the module directory
+        run: Copy-Item .\src\* ~\Documents\PowerShell\Modules\Foil\ -Recurse
+      - name: Test with Pester
+        run: Invoke-Pester -EnableExit -OutputFormat NUnitXml -OutputFile Unit.Tests.xml
+      - name: Upload Pester test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Unit-Tests
+          path: Unit.Tests.xml  
+      - name: Upload Chocolatey logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: Choco-logs
+          path: C:\ProgramData\chocolatey\logs\
+          
