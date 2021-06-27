@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/5jtvgyvlddnpsn1h?svg=true)](https://ci.appveyor.com/project/ethanbergstrom/foil)
+[![CI](https://github.com/ethanbergstrom/Foil/actions/workflows/CI.yml/badge.svg)](https://github.com/ethanbergstrom/Foil/actions/workflows/CI.yml)
 
 # Foil
 Foil is a PowerShell Crescendo wrapper for Chocolatey

@@ -153,7 +153,6 @@ Describe "error handling on Chocolatey failures" {
 	}
 
 	It 'searches for and fails to silently install a broken package version' {
-		Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force -ErrorVariable err
-		$err.Count | Should -Not -Be 0
+		{Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force -ErrorVariable err} | Should -Throw
 	}
 }

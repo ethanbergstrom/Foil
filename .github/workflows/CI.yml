@@ -27,11 +27,13 @@ jobs:
       - name: Test with Pester
         run: Invoke-Pester -CI -Output Detailed
       - name: Upload Pester test results
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: test-results
           path: testResults.xml
       - name: Upload Chocolatey logs
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: choco-logs
