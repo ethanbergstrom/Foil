@@ -46,7 +46,7 @@ jobs:
           name: module
           path: C:\Users\runneradmin\Documents\PowerShell\Modules\Foil\
       - name: Test with Pester
-        run: Invoke-Pester -CI -Output Detailed -Configuration ($(New-PesterConfiguration).TestResult.OutputFormat = 'JUnitXml')
+        run: Invoke-Pester -CI -Output Detailed -Configuration (New-PesterConfiguration -Hashtable @{TestResult = @{OutputFormat = 'JUnitXml'}})
       - name: Upload Pester test results
         if: always()
         uses: actions/upload-artifact@v2
