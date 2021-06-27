@@ -2,9 +2,6 @@ version: 1.0.{build}
 
 image: Visual Studio 2019
 
-install:
-  - cinst pester --version 4.10.1
-
 build_script:
   - pwsh: |
       Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
@@ -13,7 +10,16 @@ build_script:
       Copy-Item .\src\* ~\Documents\WindowsPowerShell\Modules\Foil\ -Recurse
 
 test_script:
-  - ps: Invoke-Pester -EnableExit -OutputFormat NUnitXml -OutputFile TestsResults.xml
+  - ps: |
+    Invoke-Pester -Configuration (New-PesterConfiguration -Hashtable @{
+      Run = @{
+        Exit = $true
+        PassThru = $true
+      }
+      TestResult = @{
+        Enabled = $true
+      }
+    })
   - ps: (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestsResults.xml))
 
 on_finish:
