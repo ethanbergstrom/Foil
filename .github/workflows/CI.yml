@@ -48,7 +48,6 @@ jobs:
       - name: Test with Pester
         run: |
           Invoke-Pester -Configuration (New-PesterConfiguration -Hashtable @{
-            Output = 'Detailed'
             Run = @{
               Exit = $true
             }
