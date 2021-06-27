@@ -2,7 +2,9 @@
 
 Describe "basic package search operations" {
 	Context 'without additional arguments' {
-		$package = 'cpu-z'
+		BeforeAll {
+			$package = 'cpu-z'
+		}
 
 		It 'gets a list of latest installed packages' {
 			Get-ChocoPackage -LocalOnly | Where-Object {$_.Name -contains 'chocolatey'} | Should -Not -BeNullOrEmpty
@@ -21,7 +23,9 @@ Describe "basic package search operations" {
 
 Describe "DSC-compliant package installation and uninstallation" {
 	Context 'without additional arguments' {
-		$package = 'cpu-z'
+		BeforeAll {
+			$package = 'cpu-z'
+		}
 
 		It 'searches for the latest version of a package' {
 			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
@@ -37,7 +41,9 @@ Describe "DSC-compliant package installation and uninstallation" {
 		}
 	}
 	Context 'with additional parameters' {
-		$package = 'sysinternals'
+		BeforeAll {
+			$package = 'sysinternals'
+		}
 
 		It 'searches for the latest version of a package' {
 			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
@@ -59,7 +65,9 @@ Describe "DSC-compliant package installation and uninstallation" {
 
 Describe "pipline-based package installation and uninstallation" {
 	Context 'without additional arguments' {
-		$package = 'cpu-z'
+		BeforeAll {
+			$package = 'cpu-z'
+		}
 
 		It 'searches for and silently installs the latest version of a package' {
 			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
@@ -69,7 +77,9 @@ Describe "pipline-based package installation and uninstallation" {
 		}
 	}
 	Context 'with additional parameters' {
-		$package = 'sysinternals'
+		BeforeAll {
+			$package = 'sysinternals'
+		}
 
 		It 'searches for and silently installs the latest version of a package' {
 			Get-ChocoPackage -Name $package -Exact | Install-ChocoPackage -Force -ParamsGlobal -Parameters "/InstallDir:$env:ProgramFiles\$package /QuickLaunchShortcut:false" | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
@@ -113,10 +123,11 @@ Describe "multi-source support" {
 }
 
 Describe "version filters" {
-	$package = 'ninja'
-	# Keep at least one version back, to test the 'latest' feature
-	$version = '1.10.1'
-
+	BeforeAll {
+		$package = 'ninja'
+		# Keep at least one version back, to test the 'latest' feature
+		$version = '1.10.1'
+	}
 	AfterAll {
 		Uninstall-ChocoPackage -Name $package -ErrorAction SilentlyContinue
 	}
@@ -132,16 +143,16 @@ Describe "version filters" {
 }
 
 Describe "error handling on Chocolatey failures" {
-	$package = 'googlechrome'
-	# This version is known to be broken, per https://github.com/chocolatey-community/chocolatey-coreteampackages/issues/1608
-	$version = '87.0.4280.141'
-
+	BeforeAll {
+		$package = 'googlechrome'
+		# This version is known to be broken, per https://github.com/chocolatey-community/chocolatey-coreteampackages/issues/1608
+		$version = '87.0.4280.141'
+	}
 	AfterAll {
 		Uninstall-ChocoPackage -Name $package -ErrorAction SilentlyContinue
 	}
 
 	It 'searches for and fails to silently install a broken package version' {
-		Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force -ErrorVariable err
-		$err.Count | Should -Not -Be 0
+		{Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force -ErrorVariable err} | Should -Throw
 	}
 }
