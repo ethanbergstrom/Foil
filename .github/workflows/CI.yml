@@ -25,16 +25,7 @@ jobs:
       - name: Copy the built module into the module directory
         run: Copy-Item .\src\* ~\Documents\PowerShell\Modules\Foil\ -Recurse
       - name: Test with Pester
-        run: |
-          Invoke-Pester -Configuration (New-PesterConfiguration -Hashtable @{
-            Run = @{
-              Exit = $true
-              PassThru = $true
-            }
-            TestResult = @{
-              Enabled = $true
-            }
-          })
+        run: Invoke-Pester -CI -Output Detailed
       - name: Upload Pester test results
         uses: actions/upload-artifact@v2
         with:
