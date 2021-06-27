@@ -64,12 +64,27 @@ jobs:
     if: success() || failure()
     runs-on: ubuntu-latest
     steps:
-    - name: Download Test Results
-      uses: actions/download-artifact@v2
-      with:
-        name: test-results
-        path: test-results
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v1
-      with:
-        files: artifacts/**/*.xml
+      - name: Download Test Results
+        uses: actions/download-artifact@v2
+        with:
+          name: test-results
+          path: test-results
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: test-results/**/*.xml
+  Publish:
+    needs: Test
+    if: github.event_name == 'release' && github.event.action == 'published'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download module
+        uses: actions/download-artifact@v2
+        with:
+          name: module
+          path: '~/.local/share/powershell/Modules/Foil'
+      - name: Publish Module
+        env:
+          NUGET_KEY: ${{ secrets.NUGET_KEY }}
+        shell: pwsh
+        run: Write-Output "Publishing..."; Publish-Module -Name Foil -NuGetApiKey $env:NUGET_KEY -Exclude @('foil.ps1')
