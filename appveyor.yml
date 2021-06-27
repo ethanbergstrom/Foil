@@ -2,6 +2,9 @@ version: 1.0.{build}
 
 image: Visual Studio 2019
 
+install:
+  - cinst pester
+
 build_script:
   - pwsh: |
       Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
