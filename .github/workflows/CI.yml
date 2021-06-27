@@ -12,12 +12,20 @@ on:
 
 jobs:
   Build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Install Crescendo
-        run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
+      - name: Setup PowerShell module cache
+        uses: actions/cache@v2
+        id: cacher
+        with:
+          path: "~/.local/share/powershell/Modules"
+          key: crescendo-0.4.1-cache
+        - name: Install Crescendo
+          if: steps.cacher.outputs.cache-hit != 'true'
+          shell: pwsh
+          run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
       - name: Build the module with Crescendo
         run: .\build.ps1
       - name: Bundle up module
@@ -63,3 +71,5 @@ jobs:
         path: test-results
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
+      with:
+        files: artifacts/**/*.xml
