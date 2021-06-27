@@ -21,8 +21,8 @@ jobs:
         id: cacher
         with:
           path: "~/.local/share/powershell/Modules"
-          key: crescendo-cache
-        - name: Install Crescendo
+          key: crescendo-0.4.1-cache
+      - name: Install Crescendo
           if: steps.cacher.outputs.cache-hit != 'true'
           shell: pwsh
           run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
