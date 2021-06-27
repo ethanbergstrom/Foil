@@ -18,12 +18,25 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Crescendo
         run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
-      - name: Create module directory
-        run: New-Item -ItemType Directory -Name Foil -Path ~\Documents\PowerShell\Modules\
       - name: Build the module with Crescendo
         run: .\build.ps1
-      - name: Copy the built module into the module directory
-        run: Copy-Item .\src\* ~\Documents\PowerShell\Modules\Foil\ -Recurse
+      - name: Bundle up module
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: module
+          path: ./src/
+  Test:
+    needs: Build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Download module
+        uses: actions/download-artifact@v2
+        with:
+          name: module
+          path: C:\Users\runneradmin\Documents\PowerShell\Modules\Foil\
       - name: Test with Pester
         run: Invoke-Pester -CI -Output Detailed
       - name: Upload Pester test results
@@ -38,3 +51,15 @@ jobs:
         with:
           name: choco-logs
           path: C:\ProgramData\chocolatey\logs\
+  Results:
+    needs: Test
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Test Results
+      uses: actions/download-artifact@v2
+      with:
+        name: test-results
+        path: test-results
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
