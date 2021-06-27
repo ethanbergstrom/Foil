@@ -11,10 +11,11 @@ on:
     types: [ published ]
 
 jobs:
-  build:
+  Build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
       - name: Install Crescendo
         run: Install-Module Microsoft.PowerShell.Crescendo -RequiredVersion 0.4.1 -Force
       - name: Create module directory
@@ -24,15 +25,23 @@ jobs:
       - name: Copy the built module into the module directory
         run: Copy-Item .\src\* ~\Documents\PowerShell\Modules\Foil\ -Recurse
       - name: Test with Pester
-        run: Invoke-Pester -EnableExit -OutputFormat NUnitXml -OutputFile Unit.Tests.xml
+        run: |
+          Invoke-Pester -Configuration (New-PesterConfiguration -Hashtable @{
+            Run = @{
+              Exit = $true
+              PassThru = $true
+            }
+            TestResult = @{
+              Enabled = $true
+            }
+          })
       - name: Upload Pester test results
         uses: actions/upload-artifact@v2
         with:
-          name: Unit-Tests
-          path: Unit.Tests.xml  
+          name: test-results
+          path: testResults.xml
       - name: Upload Chocolatey logs
         uses: actions/upload-artifact@v2
         with:
-          name: Choco-logs
+          name: choco-logs
           path: C:\ProgramData\chocolatey\logs\
-          
