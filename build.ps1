@@ -1,4 +1,4 @@
-. (Resolve-Path (Join-Path -Path src -ChildPath Foil.ps1))
+. (Join-Path -Path src -ChildPath Foil.ps1 -Resolve)
 
 $tempJsonArray = @()
 
@@ -27,4 +27,4 @@ $commands | ForEach-Object {
     }
 }
 
-Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName (Resolve-Path (Join-Path -Path src -ChildPath Foil.psm1)) -Force
+Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName (Join-Path -Path src -ChildPath Foil.psm1) -Force
