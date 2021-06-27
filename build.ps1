@@ -1,4 +1,4 @@
-. .\src\foil.ps1
+. (Resolve-Path (Join-Path -Path src -ChildPath Foil.ps1))
 
 $tempJsonArray = @()
 
