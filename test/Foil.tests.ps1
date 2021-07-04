@@ -142,29 +142,30 @@ Describe "version filters" {
 	}
 }
 
-Describe "error handling on Chocolatey installation failures" {
-	BeforeAll {
-		$package = 'googlechrome'
-		# This version is known to be broken, per https://github.com/chocolatey-community/chocolatey-coreteampackages/issues/1608
-		$version = '87.0.4280.141'
-	}
-	AfterAll {
-		Uninstall-ChocoPackage -Name $package -ErrorAction SilentlyContinue
-	}
+Describe "error handling on Chocolatey failures" {
+	Context 'package installation' {
+		BeforeAll {
+			$package = 'googlechrome'
+			# This version is known to be broken, per https://github.com/chocolatey-community/chocolatey-coreteampackages/issues/1608
+			$version = '87.0.4280.141'
+		}
+		AfterAll {
+			Uninstall-ChocoPackage -Name $package -ErrorAction SilentlyContinue
+		}
 
-	It 'searches for and fails to silently install a broken package version' {
-		{Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force} | Should -Throw
+		It 'searches for and fails to silently install a broken package version' {
+			{Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force} | Should -Throw
+		}
 	}
-}
+	Context 'package uninstallation' {
+		BeforeAll {
+			$package = 'chromium'
+			# This version is known to be broken, per https://github.com/chocolatey-community/chocolatey-coreteampackages/issues/341
+			$version = '56.0.2897.0'
+		}
 
-Describe "error handling on Chocolatey uninstallation failures" {
-	BeforeAll {
-		$package = 'chromium'
-		# This version is known to be broken, per https://github.com/chocolatey-community/chocolatey-coreteampackages/issues/341
-		$version = '56.0.2897.0'
-	}
-
-	It 'searches for, installs, and fails to silently uninstall a broken package version' {
-		{Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Uninstall-ChocoPackage} | Should -Throw
+		It 'searches for, installs, and fails to silently uninstall a broken package version' {
+			{Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Uninstall-ChocoPackage} | Should -Throw
+		}
 	}
 }
