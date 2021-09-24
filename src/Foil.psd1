@@ -1,6 +1,6 @@
 @{
 	RootModule = 'Foil.psm1'
-	ModuleVersion = '0.0.7'
+	ModuleVersion = '0.0.8'
 	GUID = '38430603-9954-45fd-949a-5f79492ffaf7'
 	Author = 'Ethan Bergstrom'
 	Copyright = '2021'
