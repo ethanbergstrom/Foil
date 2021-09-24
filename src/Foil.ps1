@@ -234,13 +234,19 @@ $Commands = @(
             @{
                 Verb = 'Uninstall'
                 Description = 'Uninstall an existing package with Chocolatey'
-                OriginalCommandElements = @('uninstall','--remove-dependencies')
+                OriginalCommandElements = @('uninstall')
                 Parameters = @(
                     @{
                         Name = 'Force'
                         OriginalName = '--force'
                         ParameterType = 'switch'
                         Description = 'Force the operation'
+                    }
+                    @{
+                        Name = 'RemoveDependencies'
+                        OriginalName = '--remove-dependencies'
+                        ParameterType = 'switch'
+                        Description = 'Remove all dependant packages not depended on by another installed package'
                     }
                 )
             }

@@ -76,6 +76,18 @@ Describe "pipline-based package installation and uninstallation" {
 			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
+	Context 'with dependencies' {
+		BeforeAll {
+			$package = 'keepass-plugin-winhello'
+		}
+
+		It 'searches for and silently installs the latest version of a package' {
+			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force | Should -HaveCount 3
+		}
+		It 'finds and silently uninstalls the locally installed package just installed, along with its dependencies' {
+			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage -RemoveDependencies | Should -HaveCount 3
+		}
+	}
 	Context 'with empty arguments' {
 		BeforeAll {
 			$package = 'cpu-z'
