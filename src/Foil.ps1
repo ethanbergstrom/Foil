@@ -150,9 +150,10 @@ $Commands = @(
                     },
                     @{
                         Name = 'Parameters'
-                        OriginalName = '--parameters'
+                        OriginalName = '--parameters='
                         ParameterType = 'string'
                         Description = 'Parameters to pass to the package'
+                        NoGap = $true
                     },
                     @{
                         Name = 'ArgsGlobal'
@@ -162,9 +163,10 @@ $Commands = @(
                     },
                     @{
                         Name = 'InstallArguments'
-                        OriginalName = '--install-arguments'
+                        OriginalName = '--install-arguments='
                         ParameterType = 'string'
                         Description = 'Parameters to pass to the package'
+                        NoGap = $true
                     },
                     @{
                         Name = 'Source'
