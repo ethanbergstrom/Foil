@@ -28,7 +28,7 @@ Get-ChocoPackage nodejs -LocalOnly -Verbose
 ```
 ### Uninstall a package
 ```PowerShell
-Get-ChocoPackage nodejs -LocalOnly -Verbose | Uninstall-ChocoPackage -Verbose
+Get-ChocoPackage keepass-plugin-winhello -LocalOnly -Verbose | Uninstall-ChocoPackage -Verbose -RemoveDependencies
 ```
 
 ### Manage package sources
