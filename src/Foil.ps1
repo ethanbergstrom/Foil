@@ -79,7 +79,7 @@ $Commands = @(
             },
             @{
                 Verb = 'Unregister'
-                Description = 'Unegister an existing Chocolatey package source'
+                Description = 'Unregister an existing Chocolatey package source'
                 OriginalCommandElements = @('remove')
                 Parameters = @(
                     @{
