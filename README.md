@@ -6,7 +6,7 @@ Foil is a PowerShell Crescendo wrapper for Chocolatey
 ## Install Foil
 ```PowerShell
 Install-Module Foil -Force
-```
+``` 
 
 ## Sample usages
 ### Search for a package
