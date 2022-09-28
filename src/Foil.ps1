@@ -181,6 +181,12 @@ $Commands = @(
                         OriginalName = '--force'
                         ParameterType = 'switch'
                         Description = 'Force the operation'
+                    },
+                    @{
+                        Name = 'PreRelease'
+                        OriginalName = '--pre'
+                        ParameterType = 'switch'
+                        Description = 'Include prerelease packages'
                     }
                 )
             },
@@ -213,6 +219,12 @@ $Commands = @(
                         ParameterType = 'string'
                         Description = 'Package Source'
                         NoGap = $true
+                    },
+                    @{
+                        Name = 'PreRelease'
+                        OriginalName = '--pre'
+                        ParameterType = 'switch'
+                        Description = 'Include prerelease packages'
                     }
                 )
                 OutputHandlers = @{

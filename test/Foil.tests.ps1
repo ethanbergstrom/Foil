@@ -61,6 +61,24 @@ Describe "DSC-compliant package installation and uninstallation" {
 			Uninstall-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
+	Context 'with prerelease parameter' {
+		BeforeAll {
+			$package = 'firefox-dev'
+		}
+
+		It 'searches for the latest version of a package' {
+			Get-ChocoPackage -Name $package -PreRelease | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+		}
+		It 'silently installs the latest version of a package' {
+			Install-ChocoPackage -Name $package -PreRelease -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+		}
+		It 'finds the locally installed package just installed' {
+			Get-ChocoPackage -Name $package -LocalOnly | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+		}
+		It 'silently uninstalls the locally installed package just installed' {
+			Uninstall-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+		}
+	}
 }
 
 Describe "pipline-based package installation and uninstallation" {
@@ -110,6 +128,18 @@ Describe "pipline-based package installation and uninstallation" {
 		}
 		It 'correctly passed parameters to the package' {
 			Get-ChildItem -Path (Join-Path -Path $env:ProgramFiles -ChildPath $package) -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+		}
+		It 'finds and silently uninstalls the locally installed package just installed' {
+			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+		}
+	}
+	Context 'with prerelease parameter' {
+		BeforeAll {
+			$package = 'firefox-dev'
+		}
+
+		It 'searches for and silently installs the latest version of a package' {
+			Get-ChocoPackage -Name $package -PreRelease | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
 			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
