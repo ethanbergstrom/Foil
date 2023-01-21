@@ -125,7 +125,7 @@ $Commands = @(
                         $packageRegex = "^(?<name>[\S]+)[\|\s]v(?<version>[\S]+)"
                         $packageReportRegex="^[0-9]*(\s*)(packages installed)"
                         $output | ForEach-Object {
-                            if (($_ -match $packageRegex) -and ($_ -notmatch $packageReportRegex) -and ($_ -notmatch 'already installed') -and $Matches.name -and $Matches.version) {
+                            if (($_ -cmatch $packageRegex) -and ($_ -notmatch $packageReportRegex) -and ($_ -notmatch 'already installed') -and $Matches.name -and $Matches.version) {
                                 [pscustomobject]@{
                                     Name = $Matches.name
                                     Version = $Matches.version

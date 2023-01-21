@@ -49,7 +49,7 @@ Describe "DSC-compliant package installation and uninstallation" {
 			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently installs the latest version of a package' {
-			Install-ChocoPackage -Name $package -Force -ParamsGlobal -Parameters "/InstallDir:$env:ProgramFiles\$package /QuickLaunchShortcut:false" | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Install-ChocoPackage -Name $package -Force -ParamsGlobal -Parameters "/InstallDir:$env:ProgramFiles\$package /QuickLaunchShortcut:false" | Should -HaveCount 1
 		}
 		It 'correctly passed parameters to the package' {
 			Get-ChildItem -Path (Join-Path -Path $env:ProgramFiles -ChildPath $package) -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
