@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2023-01-21
+#### Added
+* Futureproofing support for Chocolatey v2.0.0 and higher
+* Ability to search remote packages with `Find-ChocoPackage` via `choco search`
+#### Changed
+* Switched `Get-ChocoPackage` from using `choco search` to `choco list` to distinguish their changed meaning in Chocolatey v2.0.0 and higher
+#### Deprecated
+* When used with Chocolatey v1.0.0 and higher, `Get-ChocoPackage -LocalOnly` is deprecated, as `-LocalOnly` will become redundant in Chocolatey v2.0.0 and higher
+* When used with Chocolatey v1.0.0 and higher, `Get-ChocoPackage -Source` is deprecated, as `Get-PackageSource` only looks at installed packages beginning with Chocolatey v2.0.0 and higher. Please move search functions to `Find-ChocoPackage` instead. 
+
 ## [0.2.1] - 2023-01-21
 #### Fixed
 * No longer emits 'Environment' packages of version 'var' when installing a package that updates environment variables

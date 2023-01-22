@@ -1,6 +1,6 @@
 ﻿Import-Module Foil
 
-Describe "basic package search operations" {
+Describe "Chocolatey V1 basic package search operations" {
 	Context 'without additional arguments' {
 		BeforeAll {
 			$package = 'cpu-z'
@@ -21,7 +21,7 @@ Describe "basic package search operations" {
 	}
 }
 
-Describe "DSC-compliant package installation and uninstallation" {
+Describe "Chocolatey V1 DSC-compliant package installation and uninstallation" {
 	Context 'without additional arguments' {
 		BeforeAll {
 			$package = 'cpu-z'
@@ -81,7 +81,7 @@ Describe "DSC-compliant package installation and uninstallation" {
 	}
 }
 
-Describe "pipline-based package installation and uninstallation" {
+Describe "Chocolatey V1 pipline-based package installation and uninstallation" {
 	Context 'without additional arguments' {
 		BeforeAll {
 			$package = 'cpu-z'
@@ -147,7 +147,7 @@ Describe "pipline-based package installation and uninstallation" {
 	}
 }
 
-Describe "multi-source support" {
+Describe "Chocolatey V1 multi-source support" {
 	BeforeAll {
 		$altSource = 'LocalChocoSource'
 		$altLocation = $PSScriptRoot
@@ -176,7 +176,7 @@ Describe "multi-source support" {
 	}
 }
 
-Describe "version filters" {
+Describe "Chocolatey V1 version filters" {
 	BeforeAll {
 		$package = 'ninja'
 		# Keep at least one version back, to test the 'latest' feature
@@ -196,7 +196,7 @@ Describe "version filters" {
 	}
 }
 
-Describe "error handling on Chocolatey failures" {
+Describe "Chocolatey V1 error handling on Chocolatey failures" {
 	Context 'package installation' {
 		BeforeAll {
 			$package = 'googlechrome'

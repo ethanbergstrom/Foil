@@ -193,7 +193,7 @@ $Commands = @(
             @{
                 Verb = 'Get'
                 Description = 'Get a list of installed or available Chocolatey packages'
-                OriginalCommandElements = @('search')
+                OriginalCommandElements = @('list')
                 Parameters = @(
                     @{
                         Name = 'AllVersions'
@@ -206,6 +206,53 @@ $Commands = @(
                         OriginalName = '--local-only'
                         ParameterType = 'switch'
                         Description = 'Local Packages Only'
+                    },
+                    @{
+                        Name = 'Exact'
+                        OriginalName = '--exact'
+                        ParameterType = 'switch'
+                        Description = 'Search by exact package name'
+                    },
+                    @{
+                        Name = 'Source'
+                        OriginalName = '--source='
+                        ParameterType = 'string'
+                        Description = 'Package Source'
+                        NoGap = $true
+                    },
+                    @{
+                        Name = 'PreRelease'
+                        OriginalName = '--pre'
+                        ParameterType = 'switch'
+                        Description = 'Include prerelease packages'
+                    }
+                )
+                OutputHandlers = @{
+                    ParameterSetName = 'Default'
+                    Handler = {
+                        param ( $output )
+                        $output | ForEach-Object {
+                            $Name,$version = $_ -split '\|'
+                            if ( -not [string]::IsNullOrEmpty($name)) {
+                                [pscustomobject]@{
+                                    Name = $Name
+                                    Version = $version
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            @{
+                Verb = 'Find'
+                Description = 'Finds a list of available Chocolatey packages'
+                OriginalCommandElements = @('search')
+                Parameters = @(
+                    @{
+                        Name = 'AllVersions'
+                        OriginalName = '--all-versions'
+                        ParameterType = 'switch'
+                        Description = 'All Versions'
                     },
                     @{
                         Name = 'Exact'
