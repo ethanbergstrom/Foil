@@ -1,6 +1,6 @@
 . (Join-Path -Path src -ChildPath Foil.ps1 -Resolve)
 
-$tempJsonArray = @()
+$commandArray = @()
 
 $commands | ForEach-Object {
 	$Noun = $_.Noun
@@ -17,8 +17,7 @@ $commands | ForEach-Object {
 		$VerbOutputHandlers = $_.OutputHandlers
 		$Description = $_.Description
 		$tempJson = New-TemporaryFile
-		New-CrescendoCommand -Verb $_.Verb -Noun $Noun | ForEach-Object {
-			$_.OriginalName = $BaseOriginalName
+		$commandArray += $(New-CrescendoCommand -Verb $_.Verb -Noun $Noun -OriginalName $BaseOriginalName | ForEach-Object {
 			# Marge command elements in order of noun-level first, then verb-level, then generic
 			$_.OriginalCommandElements = ($NounOriginalCommandElements + $VerbOriginalCommandElements + $BaseOriginalCommandElements)
 			$_.Description = $Description
@@ -27,9 +26,10 @@ $commands | ForEach-Object {
 			# Prefer verb-level handlers first, then noun-level, then generic
 			$_.OutputHandlers = ($VerbOutputHandlers ?? $NounOutputHandlers) ?? $BaseOutputHandlers
 			$_
-		} | ConvertTo-Json | Out-File $tempJson
-		$tempJsonArray += $tempJson
+		})
 	}
 }
 
-Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName (Join-Path -Path src -ChildPath Foil.psm1) -Force
+$tempJson = (New-TemporaryFile).FullName
+Export-CrescendoCommand -command $commandArray -fileName $tempJson -Force
+Export-CrescendoModule -NoClobberManifest -ConfigurationFile $tempJson -ModuleName (Join-Path -Path src -ChildPath Foil.psm1) -Force
