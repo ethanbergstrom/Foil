@@ -10,9 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Ability to search remote packages with `Find-ChocoPackage` via `choco search`
 #### Changed
 * Switched `Get-ChocoPackage` from using `choco search` to `choco list` to distinguish their changed meaning in Chocolatey v2.0.0 and higher
+* Upgraded to PowerShell Crescendo 1.1 Preview 1 for compiling the module. No functional changes expected.
 #### Deprecated
-* When used with Chocolatey v1.0.0 and higher, `Get-ChocoPackage -LocalOnly` is deprecated, as `-LocalOnly` will become redundant in Chocolatey v2.0.0 and higher
-* When used with Chocolatey v1.0.0 and higher, `Get-ChocoPackage -Source` is deprecated, as `Get-PackageSource` only looks at installed packages beginning with Chocolatey v2.0.0 and higher. Please move search functions to `Find-ChocoPackage` instead. 
+* The `-LocalOnly` source to `Get-ChocoPackage` is deprecated, as `-LocalOnly` will become redundant in Chocolatey v2.0.0 and higher
+* The `-Source` switch to `Get-ChocoPackage` is deprecated, as `Get-PackageSource` only looks at installed packages beginning with Chocolatey v2.0.0 and higher
+  * Please migrate package search operations to `Find-ChocoPackage` prior to the release of Chocolatey v2.0.0
 
 ## [0.2.1] - 2023-01-21
 #### Fixed

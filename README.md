@@ -11,14 +11,14 @@ Install-Module Foil -Force
 ## Sample usages
 ### Search for a package
 ```PowerShell
-Get-ChocoPackage -Name nodejs
+Find-ChocoPackage -Name nodejs
 
-Get-ChocoPackage -Name firefox -Exact
+Find-ChocoPackage -Name firefox -Exact
 ```
 
 ### Install a package
 ```PowerShell
-Get-ChocoPackage nodejs -Exact -Verbose | Install-ChocoPackage
+Find-ChocoPackage nodejs -Exact -Verbose | Install-ChocoPackage
 
 Install-ChocoPackage -Name 7zip -Verbose
 ```
