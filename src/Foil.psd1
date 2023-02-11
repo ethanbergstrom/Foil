@@ -3,7 +3,7 @@
 	ModuleVersion = '0.3.0'
 	GUID = '38430603-9954-45fd-949a-5f79492ffaf7'
 	Author = 'Ethan Bergstrom'
-	Copyright = '2021'
+	Copyright = '2021-2023'
 	Description = 'A PowerShell Crescendo wrapper for Chocolatey'
 	# Crescendo modules aren't supported below PowerShell 5.1
 	# https://devblogs.microsoft.com/powershell/announcing-powershell-crescendo-preview-1/

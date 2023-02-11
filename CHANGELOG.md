@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Deprecated
 * The `-LocalOnly` switch for `Get-ChocoPackage` becomes deprecated when used with Chocolatey v2.0.0, due to it becoming redundant with a change to `choco list` (see chocolatey/choco#158)
 * The use of `Get-ChocoPackage` for package search operations (and it's `-Source` parameter) becomes **immediately** deprecated, as `Get-ChocoPackage` only looks at installed packages beginning with Chocolatey v2.0.0 and higher
-  * **Package repository search operations must be migrated to `Find-ChocoPackage` prior to the release of Chocolatey v2.0.0**
+  * **Package search operations must be migrated to `Find-ChocoPackage` prior to the release of Chocolatey v2.0.0**
 
 ## [0.2.1] - 2023-01-21
 #### Fixed
