@@ -1,6 +1,6 @@
 ﻿Import-Module Foil
 
-Describe "basic package search operations" {
+Describe "Chocolatey V2 basic package search operations" {
 	Context 'without additional arguments' {
 		BeforeAll {
 			$package = 'cpu-z'
@@ -10,30 +10,30 @@ Describe "basic package search operations" {
 			Get-ChocoPackage -LocalOnly | Where-Object {$_.Name -contains 'chocolatey'} | Should -Not -BeNullOrEmpty
 		}
 		It 'searches for the latest version of a package' {
-			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package}  | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package}  | Should -Not -BeNullOrEmpty
 		}
 		It 'searches for all versions of a package' {
-			Get-ChocoPackage -Name $package -AllVersions | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package -AllVersions | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'searches for the latest version of a package with a wildcard pattern' {
-			Get-ChocoPackage -Name "$package*" | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name "$package*" | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 }
 
-Describe "DSC-compliant package installation and uninstallation" {
+Describe "Chocolatey V2 DSC-compliant package installation and uninstallation" {
 	Context 'without additional arguments' {
 		BeforeAll {
 			$package = 'cpu-z'
 		}
 
 		It 'searches for the latest version of a package' {
-			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently installs the latest version of a package' {
 			Install-ChocoPackage -Name $package -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
-		It 'finds the locally installed package just installed' {
+		It 'detects the locally installed package just installed' {
 			Get-ChocoPackage -Name $package -LocalOnly | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently uninstalls the locally installed package just installed' {
@@ -46,7 +46,7 @@ Describe "DSC-compliant package installation and uninstallation" {
 		}
 
 		It 'searches for the latest version of a package' {
-			Get-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently installs the latest version of a package' {
 			Install-ChocoPackage -Name $package -Force -ParamsGlobal -Parameters "/InstallDir:$env:ProgramFiles\$package /QuickLaunchShortcut:false" | Should -HaveCount 1
@@ -54,7 +54,7 @@ Describe "DSC-compliant package installation and uninstallation" {
 		It 'correctly passed parameters to the package' {
 			Get-ChildItem -Path (Join-Path -Path $env:ProgramFiles -ChildPath $package) -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
 		}
-		It 'finds the locally installed package just installed' {
+		It 'detects the locally installed package just installed' {
 			Get-ChocoPackage -Name $package -LocalOnly | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently uninstalls the locally installed package just installed' {
@@ -67,12 +67,12 @@ Describe "DSC-compliant package installation and uninstallation" {
 		}
 
 		It 'searches for the latest version of a package' {
-			Get-ChocoPackage -Name $package -PreRelease | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package -PreRelease | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently installs the latest version of a package' {
 			Install-ChocoPackage -Name $package -PreRelease -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
-		It 'finds the locally installed package just installed' {
+		It 'detects the locally installed package just installed' {
 			Get-ChocoPackage -Name $package -LocalOnly | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'silently uninstalls the locally installed package just installed' {
@@ -81,16 +81,16 @@ Describe "DSC-compliant package installation and uninstallation" {
 	}
 }
 
-Describe "pipline-based package installation and uninstallation" {
+Describe "Chocolatey V2 pipline-based package installation and uninstallation" {
 	Context 'without additional arguments' {
 		BeforeAll {
 			$package = 'cpu-z'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
-		It 'finds and silently uninstalls the locally installed package just installed' {
+		It 'detects and silently uninstalls the locally installed package just installed' {
 			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
@@ -100,9 +100,9 @@ Describe "pipline-based package installation and uninstallation" {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force | Should -HaveCount 3
+			Find-ChocoPackage -Name $package | Install-ChocoPackage -Force | Should -HaveCount 3
 		}
-		It 'finds and silently uninstalls the locally installed package just installed, along with its dependencies' {
+		It 'detects and silently uninstalls the locally installed package just installed, along with its dependencies' {
 			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage -RemoveDependencies | Should -HaveCount 3
 		}
 	}
@@ -112,9 +112,9 @@ Describe "pipline-based package installation and uninstallation" {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force -Parameters '' | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package | Install-ChocoPackage -Force -Parameters '' | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
-		It 'finds and silently uninstalls the locally installed package just installed' {
+		It 'detects and silently uninstalls the locally installed package just installed' {
 			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
@@ -124,12 +124,12 @@ Describe "pipline-based package installation and uninstallation" {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Get-ChocoPackage -Name $package -Exact | Install-ChocoPackage -Force -ParamsGlobal -Parameters "/InstallDir:$env:ProgramFiles\$package /QuickLaunchShortcut:false" | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package -Exact | Install-ChocoPackage -Force -ParamsGlobal -Parameters "/InstallDir:$env:ProgramFiles\$package /QuickLaunchShortcut:false" | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'correctly passed parameters to the package' {
 			Get-ChildItem -Path (Join-Path -Path $env:ProgramFiles -ChildPath $package) -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
 		}
-		It 'finds and silently uninstalls the locally installed package just installed' {
+		It 'detects and silently uninstalls the locally installed package just installed' {
 			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
@@ -139,15 +139,15 @@ Describe "pipline-based package installation and uninstallation" {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Get-ChocoPackage -Name $package -PreRelease | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package -PreRelease | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
-		It 'finds and silently uninstalls the locally installed package just installed' {
+		It 'detects and silently uninstalls the locally installed package just installed' {
 			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 }
 
-Describe "multi-source support" {
+Describe "Chocolatey V2 multi-source support" {
 	BeforeAll {
 		$altSource = 'LocalChocoSource'
 		$altLocation = $PSScriptRoot
@@ -165,9 +165,9 @@ Describe "multi-source support" {
 		{ Register-ChocoSource -Name $altSource -Location $altLocation | Where-Object {$_.Name -eq $altSource} } | Should -Not -Throw
 	}
 	It 'searches for and installs the latest version of a package from an alternate source' {
-		Get-ChocoPackage -Name $package -source $altSource | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
+		Find-ChocoPackage -Name $package -Source $altSource | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 	}
-	It 'finds and uninstalls a package installed from an alternate source' {
+	It 'detects and uninstalls a package installed from an alternate source' {
 		Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage | Where-Object {$_.Name -contains $package} | Should -Not -BeNullOrEmpty
 	}
 	It 'unregisters an alternative package source' {
@@ -176,7 +176,7 @@ Describe "multi-source support" {
 	}
 }
 
-Describe "version filters" {
+Describe "Chocolatey V2 version filters" {
 	BeforeAll {
 		$package = 'ninja'
 		# Keep at least one version back, to test the 'latest' feature
@@ -188,15 +188,15 @@ Describe "version filters" {
 
 	Context 'required version' {
 		It 'searches for and silently installs a specific package version' {
-			Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
+			Find-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
 		}
-		It 'finds and silently uninstalls a specific package version' {
+		It 'detects and silently uninstalls a specific package version' {
 			Get-ChocoPackage -Name $package -Version $version -LocalOnly | UnInstall-ChocoPackage -Force | Where-Object {$_.Name -contains $package -and $_.Version -eq $version} | Should -Not -BeNullOrEmpty
 		}
 	}
 }
 
-Describe "error handling on Chocolatey failures" {
+Describe "Chocolatey V2 error handling on Chocolatey failures" {
 	Context 'package installation' {
 		BeforeAll {
 			$package = 'googlechrome'
@@ -208,7 +208,7 @@ Describe "error handling on Chocolatey failures" {
 		}
 
 		It 'searches for and fails to silently install a broken package version' {
-			{Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force} | Should -Throw
+			{Find-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force} | Should -Throw
 		}
 	}
 	Context 'package uninstallation' {
@@ -219,7 +219,7 @@ Describe "error handling on Chocolatey failures" {
 		}
 
 		It 'searches for, installs, and fails to silently uninstall a broken package version' {
-			{Get-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Uninstall-ChocoPackage} | Should -Throw
+			{Find-ChocoPackage -Name $package -Version $version -Exact | Install-ChocoPackage -Force | Uninstall-ChocoPackage} | Should -Throw
 		}
 	}
 }
