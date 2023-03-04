@@ -1,5 +1,17 @@
 ﻿Import-Module Foil
 
+Describe "Chocolatey V2 test validity" {
+	BeforeAll {
+		$package = 'chocolatey'
+		$version = '2.0.0'
+		# Upgrade to Chocolatey v2 alpha to test the API changes
+		choco upgrade $package --pre
+	}
+	It 'confirms version of Chocolatey is at least 2.0.0' {
+		Get-ChocoPackage -LocalOnly | Where-Object {$_.Name -eq $package -And $_.Version -ge $version} | Should -Not -BeNullOrEmpty
+	}
+}
+
 Describe "Chocolatey V2 basic package search operations" {
 	Context 'without additional arguments' {
 		BeforeAll {
