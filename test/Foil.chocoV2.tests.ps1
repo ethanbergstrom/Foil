@@ -108,14 +108,14 @@ Describe "Chocolatey V2 pipline-based package installation and uninstallation" {
 	}
 	Context 'with dependencies' {
 		BeforeAll {
-			$package = 'keepass-plugin-winhello'
+			$package = 'cpu-z'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-ChocoPackage -Name $package | Install-ChocoPackage -Force | Should -HaveCount 3
+			Find-ChocoPackage -Name $package | Install-ChocoPackage -Force | Should -HaveCount 2
 		}
 		It 'detects and silently uninstalls the locally installed package just installed, along with its dependencies' {
-			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage -RemoveDependencies | Should -HaveCount 3
+			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage -RemoveDependencies | Should -HaveCount 2
 		}
 	}
 	Context 'with empty arguments' {
