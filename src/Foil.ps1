@@ -122,30 +122,15 @@ $Commands = @(
                     if ($failures) {
                         Write-Error ($output -join "`r`n")
                     } else {
-                        $packageVersionRegex = "^(?<name>[\S]+)[\|\s]v(?<version>[\S]+)"
-                        $packageNoVersionRegex = "(?<name>[\S]+) has been successfully"
-                        $packageReportRegex = "^[0-9]*(\s*)(packages installed)"
+                        $packageRegex = "^(?<name>[\S]+)[\|\s]v(?<version>[\S]+)"
+                        $packageReportRegex="^[0-9]*(\s*)(packages installed)"
                         $output | ForEach-Object {
-                            # Output is provided in an array of strings, so we inspect each output string for package name (and optionally version) candidates
-                            # Starting with Choco v2, package version information is no longer included during uninstall
-                            # To maintain passivity with pre-v2 and consuming package provider modules, we match on multiple possible patterns, which can result in multiple matches for the same package
-                            if ((($_ -cmatch $packageVersionRegex) -or ($_ -cmatch $packageNoVersionRegex)) -and $Matches.name -and ($_ -notmatch $packageReportRegex)) {
+                            if (($_ -cmatch $packageRegex) -and ($_ -notmatch $packageReportRegex) -and ($_ -notmatch 'already installed') -and $Matches.name -and $Matches.version) {
                                 [pscustomobject]@{
                                     Name = $Matches.name
                                     Version = $Matches.version
                                 }
                             }
-                        } | Sort-Object Name, Version | Group-Object Name | ForEach-Object {
-                            # If there are multiple matches for the same package, merge them together (including any pre-v2 uninstall version info) and return them
-                            $packageCandidate = @{
-                                Name = $_.Name
-                            }
-
-                            if ($_.Group.Version) {
-                                $packageCandidate.Version = $_.Group.Version | Select-Object -Unique
-                            }
-
-                            [pscustomobject]$packageCandidate
                         }
                     }
                 }
