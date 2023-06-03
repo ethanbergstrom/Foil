@@ -100,7 +100,7 @@ Describe "Chocolatey V1 pipline-based package installation and uninstallation" {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Get-ChocoPackage -Name $package | Install-ChocoPackage -Force | Should -HaveCount 3
+			Get-ChocoPackage -Name $package -Exact | Install-ChocoPackage -Force | Should -HaveCount 3
 		}
 		It 'detects and silently uninstalls the locally installed package just installed, along with its dependencies' {
 			Get-ChocoPackage -Name $package -LocalOnly -Exact | Uninstall-ChocoPackage -RemoveDependencies | Should -HaveCount 3
