@@ -74,6 +74,22 @@ $Commands = @(
                         ParameterType = 'string'
                         Description = 'Source Location'
                         Mandatory = $true
+                    },
+                    @{
+                        Name = 'User'
+                        OriginalName = '--user='
+                        NoGap = $true
+                        ParameterType = 'string'
+                        Description = 'User Name'
+                        Mandatory = $false
+                    },
+                    @{
+                        Name = 'Password'
+                        OriginalName = '--password='
+                        NoGap = $true
+                        ParameterType = 'string'
+                        Description = 'User Password'
+                        Mandatory = $false
                     }
                 )
             },
