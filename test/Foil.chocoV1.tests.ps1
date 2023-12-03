@@ -1,5 +1,17 @@
 ﻿Import-Module Foil
 
+Describe "Chocolatey V1 test validity" {
+	BeforeAll {
+		$package = 'chocolatey'
+		$version = '1.4.0'
+		# Ensure an older verison of Chocolatey is present to provide for test coverage
+		choco upgrade $package —version $version —allow-downgrade
+	}
+	It 'confirms version of Chocolatey is below v2' {
+		Get-ChocoPackage -LocalOnly | Where-Object {$_.Name -eq $package -And $_.Version -lt '2.0.0'} | Should -Not -BeNullOrEmpty
+	}
+}
+
 Describe "Chocolatey V1 basic package search operations" {
 	Context 'without additional arguments' {
 		BeforeAll {
